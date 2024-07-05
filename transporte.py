@@ -1,76 +1,70 @@
-import pygame
 from pygame.locals import *
 import random
 import itertools
-import sys
 import numpy as np
 import pygame
-from typing import List, Tuple
+from typing import Tuple
 
-TAMANHO_POPULACAO = 10000
+from funcoes import gerar_populacao, calcular_matriz_distancias, order_crossover, mutate
+from tipos import Armazem
+
+TAMANHO_POPULACAO = 100
 TOTAL_GERACOES = 100
 
-
-CAPACIDADE_MAXIMA = 60
+CAPACIDADE_MAXIMA = 50
 MAXIMO_VEICULOS = 10
-TOTAL_DEMANDA = 5000000
-DISTANCIA = 10000
 
-random.seed(2)
+PROBABILIDADE_MUTACAO = 0.7
 
-def gerar_populacao(maximo_veiculos: int, capacidade_maxima: int, tamanho_populacao: int) -> List[Tuple[int, int]]:
-    populacao = []
-    for _ in range(tamanho_populacao):
-        veiculo = random.randint(1, maximo_veiculos)
-        capacidade = random.randint(1, capacidade_maxima)
-        individuo = (veiculo, capacidade)
+LOCAL_CIDADES = [(733, 251), (706, 87), (546, 97), (562, 49), (576, 253)]
 
-        populacao.append(individuo)
-    return populacao
+ESTOQUE_MINIMO_CIDADES = [7000, 4200, 3500, 2500, 5000]
 
-populacao = gerar_populacao(MAXIMO_VEICULOS, CAPACIDADE_MAXIMA, TAMANHO_POPULACAO)
+armazens = []
+for local_cidade, estoque in zip(LOCAL_CIDADES, ESTOQUE_MINIMO_CIDADES):
+    armazem = Armazem(local_cidade, estoque)
+    armazens.append(armazem)
 
+dist_matrix = calcular_matriz_distancias(LOCAL_CIDADES)
 
-def calcular_fitness(individuo: Tuple[int, int], demanda: int, distancia: int) -> float:
-    quantidade_veiculos = individuo[0]
-    capacidade_veiculo = individuo[1]
-    
-    velocidade = 120 - capacidade_veiculo
-    tempo = distancia / velocidade
+random.seed(34)
 
-    demanda_por_veiculo = demanda / quantidade_veiculos
-
-    viagens = demanda_por_veiculo / capacidade_veiculo
-    tempo_total = tempo * viagens
-
-    return quantidade_veiculos * tempo_total
-
-
-geracao = gerar_populacao(MAXIMO_VEICULOS, CAPACIDADE_MAXIMA, TAMANHO_POPULACAO)
+geracao = gerar_populacao(LOCAL_CIDADES, MAXIMO_VEICULOS, CAPACIDADE_MAXIMA, TAMANHO_POPULACAO)
 
 contador_geracao = itertools.count(start=1)
 
 for _ in range(TOTAL_GERACOES):
-    #print(geracao)
     populacao_fitness = []
     
     for individuo in geracao:
-        fitness = calcular_fitness(individuo, TOTAL_DEMANDA, DISTANCIA)
+        fitness = individuo.calcular_fitness(ESTOQUE_MINIMO_CIDADES, dist_matrix)
         populacao_fitness.append((individuo, fitness))
-        #print(f"Individuo: {individuo}, fitness: {fitness}")
 
     populacao_fitness = sorted(populacao_fitness, key=lambda x: x[1])
     melhor_individuo, melhor_tempo = populacao_fitness[0]
 
     print(f"Geração: {contador_geracao} Melhor individuo: {melhor_individuo}, melhor tempo: {melhor_tempo}")
 
-    nova_geracao = gerar_populacao(MAXIMO_VEICULOS, CAPACIDADE_MAXIMA, TAMANHO_POPULACAO - 1)
+    nova_geracao = []
 
-    nova_geracao.append(melhor_individuo)
+    nova_geracao.append(melhor_individuo) # Elitismo - nova geração começa com o melhor individuo
+
+    while len(nova_geracao) < (TAMANHO_POPULACAO / 5): # 20% da nova geração é filha dos 10 melhores individuos da geração anterior
+        pai1_fitness, pai2_fitness = random.choices(populacao_fitness[:10], k=2)
+
+        pai1 = pai1_fitness[0]
+        pai2 = pai2_fitness[0]
+        
+        filho = order_crossover(pai1, pai2)
+
+        filho = mutate(filho, PROBABILIDADE_MUTACAO)
+
+        nova_geracao.append(filho)
+
+    restante = TAMANHO_POPULACAO - len(nova_geracao)
+
+    nova_geracao.extend(gerar_populacao(LOCAL_CIDADES, MAXIMO_VEICULOS, CAPACIDADE_MAXIMA, restante)) # Preenche o restante da nova geração com individuos aleatórios   
 
     geracao = nova_geracao
     numero_geracao = next(contador_geracao)
-
-
-    
 
