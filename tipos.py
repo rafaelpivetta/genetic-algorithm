@@ -48,7 +48,7 @@ class Individuo:
                 itens_por_armazem[armazem] += capacidade_veiculo * quantidade_veiculos
 
                 if i == len(rota_a_percorrer) - 1:
-                    distancia = dist_matrix[rota_a_percorrer[i]][0] # Volta para o primeiro armazem
+                    distancia = 0
                 else:
                     distancia = dist_matrix[rota_a_percorrer[i]][rota_a_percorrer[i+1]]
 
