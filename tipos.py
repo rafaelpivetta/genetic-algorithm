@@ -29,18 +29,28 @@ class Individuo:
 
         while True:
 
-            if all([item >= capacidade_armazem_cidades[i] for i, item in enumerate(itens_por_armazem)]):
-                break
+            rota_a_percorrer = []
 
             for i in range(len(rota)):
                 armazem = rota[i]
 
+                if itens_por_armazem[armazem] < capacidade_armazem_cidades[armazem]:
+                    rota_a_percorrer.append(armazem)
+
+            if not rota_a_percorrer:
+                break
+
+            #print (f"Armazens: {itens_por_armazem} - Rota: {rota_a_percorrer} - Veiculos: {quantidade_veiculos} - Capacidade: {capacidade_veiculo}")
+
+            for i in range(len(rota_a_percorrer)):
+                armazem = rota_a_percorrer[i]
+
                 itens_por_armazem[armazem] += capacidade_veiculo * quantidade_veiculos
 
-                if i == len(rota) - 1:
-                    distancia = dist_matrix[rota[i]][0] # Volta para o primeiro armazem
+                if i == len(rota_a_percorrer) - 1:
+                    distancia = 0
                 else:
-                    distancia = dist_matrix[rota[i]][rota[i+1]]
+                    distancia = dist_matrix[rota_a_percorrer[i]][rota_a_percorrer[i+1]]
 
                 tempo = round(distancia / velocidade, 2)
 
