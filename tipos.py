@@ -2,8 +2,9 @@ from typing import List, Tuple
 
 
 class Armazem:
-    def __init__(self, localizacao: Tuple[int, int], estoque_minimo: int):
+    def __init__(self, localizacao: Tuple[int, int], nome_cidade: str, estoque_minimo: int):
         self.localizacao = localizacao
+        self.nome_cidade = nome_cidade
         self.estoque_minimo = estoque_minimo
 
 
@@ -14,16 +15,16 @@ class Individuo:
         self.rota = rota
 
     def __repr__(self):
-        return f"Veiculos: {self.veiculos}, Capacidade: {self.capacidade}, Rota: {self.rota}"
+        return f"Veículos: {self.veiculos}, Cap. Un.: {self.capacidade}, Cap. Total.: {self.veiculos * self.capacidade}, Rota: {self.rota}"
     
     def calcular_fitness(self, capacidade_armazem_cidades: List[int], dist_matrix: List[List[float]]) -> float:
         capacidade_veiculo = self.capacidade
         rota = self.rota
         quantidade_veiculos = self.veiculos
         
-        itens_por_armazem = [0] * len(capacidade_armazem_cidades) # Inicializa a quantidade de itens em cada armazem
+        itens_por_armazem = [0] * len(capacidade_armazem_cidades) # Inicializa a quantidade de itens em cada armazém
 
-        velocidade = 120 - capacidade_veiculo # A velocidade do veiculo diminui conforme a capacidade aumenta
+        velocidade = 120 - capacidade_veiculo # A velocidade do veículo diminui conforme a capacidade aumenta
 
         tempo_total = 0
 
@@ -40,7 +41,7 @@ class Individuo:
             if not rota_a_percorrer:
                 break
 
-            #print (f"Armazens: {itens_por_armazem} - Rota: {rota_a_percorrer} - Veiculos: {quantidade_veiculos} - Capacidade: {capacidade_veiculo}")
+            #print (f"Armazéns: {itens_por_armazem} - Rota: {rota_a_percorrer} - Veículos: {quantidade_veiculos} - Capacidade: {capacidade_veiculo}")
 
             for i in range(len(rota_a_percorrer)):
                 armazem = rota_a_percorrer[i]
