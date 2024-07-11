@@ -1,0 +1,7 @@
+__pycache__/
+<<<<<<< HEAD
+/env
+=======
+/env
+/.vscode/
+>>>>>>> upstream/main
