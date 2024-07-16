@@ -81,28 +81,27 @@ def init_screen(width: int, height: int, caption: str) -> pygame.Surface:
     return screen
 
 def desenhar_rotas(screen, melhor_rota, armazens):
-
+    
     # Cores
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     RED = (255, 0, 0)
-    GREEN = (0, 255, 0)
     BLUE = (0, 0, 255)
 
     # Limpa a tela
     screen.fill(BLACK)
 
-    # Desenha os pontos (dots) na tela
+    font = pygame.font.Font(None, 20)
     
     # Desenha os pontos (dots) na tela
     for armazem in armazens:
         x, y = armazem.localizacao
         pygame.draw.circle(screen, BLUE, (x, y), 5)
-        font = pygame.font.Font(None, 20)
+        
         text = font.render(armazem.nome_cidade, True, WHITE)
         text_rect = text.get_rect(center=(x - 15, y - 15))
         screen.blit(text, text_rect)
-
+    
     # Desenha as linhas da melhor rota
     for i in range(len(melhor_rota)):
         cidade_atual = melhor_rota[i]
@@ -115,9 +114,29 @@ def desenhar_rotas(screen, melhor_rota, armazens):
             armazens[proxima_cidade].localizacao,
             2,
         )
+        text = font.render(f"({i + 1})", True, WHITE)
+        x, y = armazens[cidade_atual].localizacao
+        text_rect = text.get_rect(center=(x - 20, y - 30))
+        screen.blit(text, text_rect)
 
     pygame.display.flip()  # Atualiza a tela
 
+def desenhar_info(screen, geracao, melhor_tempo, melhor_individuo):
+    font = pygame.font.Font(None, 20)
+    GREEN = (0, 255, 0)
+
+    text = font.render(f"Geração: {geracao}", True, GREEN)  
+    screen.blit(text, (10, 500))
+
+    if melhor_individuo:
+        
+        text = font.render(f"Melhor indivíduo: {melhor_individuo}", True, GREEN)
+        screen.blit(text, (10, 520))
+        text = font.render(f"Melhor tempo: {melhor_tempo}", True, GREEN)
+        screen.blit(text, (10, 540))
+        pygame.display.flip()
+
+    
 def metodo_selecao_aleatorio(populacao_fitness):
     pai1_fitness, pai2_fitness = random.choices(populacao_fitness[:10], k=2)
     pai1 = pai1_fitness[0]

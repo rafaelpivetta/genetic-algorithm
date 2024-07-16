@@ -15,7 +15,7 @@ class Individuo:
         self.rota = rota
 
     def __repr__(self):
-        return f"Veículos: {self.veiculos}, Cap. Un.: {self.capacidade}, Cap. Total.: {self.veiculos * self.capacidade}, Rota: {self.rota}"
+        return f"Veículos: {self.veiculos}, Cap. Un.: {self.capacidade}, Cap. Total.: {self.veiculos * self.capacidade}"
     
     def calcular_fitness(self, capacidade_armazem_cidades: List[int], dist_matrix: List[List[float]]) -> float:
         capacidade_veiculo = self.capacidade
