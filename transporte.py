@@ -12,7 +12,14 @@ from funcoes import (
     mutate,
     init_screen,
     desenhar_rotas,
+    metodo_selecao_aleatorio,
+    metodo_selecao_torneio,
+    metodo_selecao_roleta,
+    metodo_selecao_rank,
+    metodo_selecao_elitismo,
+    metodo_selecao_truncamento,
 )
+
 from tipos import Armazem
 
 # Constantes e dados do problema
@@ -51,6 +58,16 @@ def main(screen):
 
     contador_geracao = itertools.count(start=1)
 
+    # Mapeamento dos métodos de seleção de pais
+    metodos_selecao = {
+        1: metodo_selecao_aleatorio,
+        2: metodo_selecao_torneio,
+        3: metodo_selecao_roleta,
+        4: metodo_selecao_rank,
+        5: metodo_selecao_elitismo,
+        6: metodo_selecao_truncamento,
+    }
+
     for _ in range(TOTAL_GERACOES):
         clock = pygame.time.Clock()
 
@@ -79,10 +96,9 @@ def main(screen):
         nova_geracao.append(melhor_individuo)  # Elitismo - nova geração começa com o melhor indivíduo
 
         while len(nova_geracao) < (TAMANHO_POPULACAO / 5):  # 20% da nova geração é filha dos 10 melhores indivíduos da geração anterior
-            pai1_fitness, pai2_fitness = random.choices(populacao_fitness[:10], k=2)
+            metodo = random.randint(1, len(metodos_selecao))  # Gera um número aleatório baseado no tamanho do dicionário de seleção de pais
 
-            pai1 = pai1_fitness[0]
-            pai2 = pai2_fitness[0]
+            pai1, pai2 = metodos_selecao[metodo](populacao_fitness)
 
             filho = order_crossover(pai1, pai2)
 
