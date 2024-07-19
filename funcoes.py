@@ -121,7 +121,7 @@ def desenhar_rotas(screen, melhor_rota, armazens):
 
     pygame.display.flip()  # Atualiza a tela
 
-def desenhar_info(screen, geracao, melhor_tempo, melhor_individuo):
+def desenhar_info(screen, geracao, melhor_tempo, melhor_individuo, metodo_selecao_escolhido):
     font = pygame.font.Font(None, 20)
     GREEN = (0, 255, 0)
 
@@ -134,8 +134,11 @@ def desenhar_info(screen, geracao, melhor_tempo, melhor_individuo):
         screen.blit(text, (10, 520))
         text = font.render(f"Melhor tempo: {melhor_tempo}", True, GREEN)
         screen.blit(text, (10, 540))
-        pygame.display.flip()
 
+    text = font.render(f"Método de seleção de pais escolhido: {metodo_selecao_escolhido}", True, GREEN)  
+    screen.blit(text, (10, 560))
+
+    pygame.display.flip()
     
 def metodo_selecao_aleatorio(populacao_fitness):
     pai1_fitness, pai2_fitness = random.choices(populacao_fitness[:10], k=2)
@@ -204,19 +207,4 @@ def metodo_selecao_rank(populacao_fitness):
             pai2 = individuo
             break
 
-    return pai1, pai2
-
-def metodo_selecao_elitismo(populacao_fitness):
-    populacao_ordenada = sorted(populacao_fitness, key=lambda x: x[1])
-    pai1 = populacao_ordenada[0][0]
-    pai2 = populacao_ordenada[1][0]
-    return pai1, pai2
-
-def metodo_selecao_truncamento(populacao_fitness):
-    porcentagem = 0.5
-    n_selecionados = int(len(populacao_fitness) * porcentagem)
-    populacao_truncada = populacao_fitness[:n_selecionados]
-    pai1_fitness, pai2_fitness = random.choices(populacao_truncada, k=2)
-    pai1 = pai1_fitness[0]
-    pai2 = pai2_fitness[0]
     return pai1, pai2

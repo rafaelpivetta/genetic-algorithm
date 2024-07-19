@@ -17,8 +17,6 @@ from funcoes import (
     metodo_selecao_torneio,
     metodo_selecao_roleta,
     metodo_selecao_rank,
-    metodo_selecao_elitismo,
-    metodo_selecao_truncamento,
 )
 
 from tipos import Armazem
@@ -30,6 +28,7 @@ TOTAL_GERACOES = 1000
 CAPACIDADE_MAXIMA = 50
 MAXIMO_VEICULOS = 10
 PROBABILIDADE_MUTACAO = 0.7
+METODO_SELECAO = 1
 
 PERCENTUAL_MARGEM_TELA = 0.07  # 7% de margem
 margin_x = int(WIDTH * PERCENTUAL_MARGEM_TELA)
@@ -65,8 +64,6 @@ def main(screen):
         2: metodo_selecao_torneio,
         3: metodo_selecao_roleta,
         4: metodo_selecao_rank,
-        5: metodo_selecao_elitismo,
-        6: metodo_selecao_truncamento,
     }
 
     melhor_individuo_geral = None
@@ -94,19 +91,19 @@ def main(screen):
 
         melhor_individuo_geral = melhor_individuo
         melhor_tempo_geral = melhor_tempo
-
+        metodo_selecao_escolhido = metodos_selecao[METODO_SELECAO].__name__
+        
         # Chama a função para desenhar as rotas
         desenhar_rotas(screen, melhor_individuo_geral.rota, armazens)
-        desenhar_info(screen, geracao_atual + 1, melhor_tempo_geral, melhor_individuo_geral)
+        desenhar_info(screen, geracao_atual + 1, melhor_tempo_geral, melhor_individuo_geral, metodo_selecao_escolhido)
         
         nova_geracao = []
 
         nova_geracao.append(melhor_individuo)  # Elitismo - nova geração começa com o melhor indivíduo
 
         while len(nova_geracao) < (TAMANHO_POPULACAO / 10):  # 10% da nova geração é filha dos 10 melhores indivíduos da geração anterior
-            metodo = random.randint(1, len(metodos_selecao))  # Gera um número aleatório baseado no tamanho do dicionário de seleção de pais
-
-            pai1, pai2 = metodos_selecao[metodo](populacao_fitness)
+            
+            pai1, pai2 = metodos_selecao[METODO_SELECAO](populacao_fitness)
 
             filho = order_crossover(pai1, pai2)
 
