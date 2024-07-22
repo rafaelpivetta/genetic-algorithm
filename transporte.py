@@ -22,7 +22,7 @@ from funcoes import (
 from tipos import Armazem
 
 # Constantes e dados do problema
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 1366, 768
 TAMANHO_POPULACAO = 500
 TOTAL_GERACOES = 1000
 CAPACIDADE_MAXIMA = 50
@@ -30,12 +30,14 @@ MAXIMO_VEICULOS = 10
 PROBABILIDADE_MUTACAO = 0.7
 METODO_SELECAO = 1
 
-PERCENTUAL_MARGEM_TELA = 0.07  # 7% de margem
-margin_x = int(WIDTH * PERCENTUAL_MARGEM_TELA)
-margin_y = int(HEIGHT * PERCENTUAL_MARGEM_TELA)
+PERCENTUAL_MARGEM = 0.05  # 5% de margem
+margin_x = int(WIDTH * PERCENTUAL_MARGEM)
+margin_y = int(HEIGHT * PERCENTUAL_MARGEM)
+
+altura_parte_inferior = int(HEIGHT * 0.8) # 80% da altura total da tela
 
 NOMES_CIDADES = ["Tokyo", "New York", "Paris", "Berlim", "Roma", "Pequim", "Madrid", "Washington", "Brasilia", "Montevideo"]
-LOCAL_CIDADES = [(random.randint(margin_x, WIDTH - margin_x), random.randint(margin_y, HEIGHT - margin_y - 100)) for _ in range(len(NOMES_CIDADES))]
+LOCAL_CIDADES = [(random.randint(margin_x, WIDTH - margin_x), random.randint(margin_y, altura_parte_inferior - margin_y)) for _ in range(len(NOMES_CIDADES))]
 ESTOQUE_MINIMO_CIDADES = [7000, 4200, 3500, 2500, 5000, 6000, 3000, 2500, 1800, 4200]
 
 # Inicializa a tela do Pygame
