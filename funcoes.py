@@ -143,15 +143,15 @@ def plotar_grafico(geracoes, tempos):
     
     return pygame.image.fromstring(raw_data, size, "RGB")
 
-def desenhar_info(screen, geracao, melhor_tempo, melhor_individuo, metodo_selecao_escolhido):
+def desenhar_info(screen, geracao, melhor_tempo, melhor_individuo, metodo_selecao_escolhido, WIDTH, HEIGHT):
     font = pygame.font.Font(None, 20)
     GREEN = (0, 255, 0)
 
     # Calcula a altura onde a linha divisória inferior deve ser desenhada
-    altura_parte_inferior = int(900 * 0.60)  # 65% da altura total da tela
+    altura_parte_inferior = int(HEIGHT * 0.60)  # 65% da altura total da tela
 
     # Desenha a linha horizontal na parte inferior
-    #pygame.draw.line(screen, GREEN, (0, altura_parte_inferior), (1290, altura_parte_inferior), 2)
+    #pygame.draw.line(screen, GREEN, (0, altura_parte_inferior), (WIDTH, altura_parte_inferior), 2)
 
     # Ajusta as posições verticais das linhas de texto
     linha1_y = altura_parte_inferior + 20
@@ -175,7 +175,7 @@ def desenhar_info(screen, geracao, melhor_tempo, melhor_individuo, metodo_seleca
         # Plotar o gráfico
         if geracoes and tempos:
             graph_surface = plotar_grafico(geracoes, tempos)
-            screen.blit(graph_surface, (600, altura_parte_inferior))
+            screen.blit(graph_surface, (int(WIDTH/2), altura_parte_inferior))
 
 
     text = font.render(f"Método de seleção de pais escolhido: {metodo_selecao_escolhido}", True, GREEN)  

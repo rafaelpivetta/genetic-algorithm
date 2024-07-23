@@ -34,7 +34,7 @@ PERCENTUAL_MARGEM = 0.05  # 5% de margem
 margin_x = int(WIDTH * PERCENTUAL_MARGEM)
 margin_y = int(HEIGHT * PERCENTUAL_MARGEM)
 
-altura_parte_inferior = int(HEIGHT * 0.60) # 80% da altura total da tela
+altura_parte_inferior = int(HEIGHT * 0.60) # 60% da altura total da tela
 
 NOMES_CIDADES = ["Tokyo", "New York", "Paris", "Berlim", "Roma", "Pequim", "Madrid", "Washington", "Brasilia", "Montevideo"]
 LOCAL_CIDADES = [(random.randint(margin_x, WIDTH - margin_x), random.randint(margin_y, altura_parte_inferior - margin_y)) for _ in range(len(NOMES_CIDADES))]
@@ -97,7 +97,7 @@ def main(screen):
         
         # Chama a função para desenhar as rotas
         desenhar_rotas(screen, melhor_individuo_geral.rota, armazens)
-        desenhar_info(screen, geracao_atual + 1, melhor_tempo_geral, melhor_individuo_geral, metodo_selecao_escolhido)
+        desenhar_info(screen, geracao_atual + 1, melhor_tempo_geral, melhor_individuo_geral, metodo_selecao_escolhido, WIDTH, HEIGHT)
         
         nova_geracao = []
 
