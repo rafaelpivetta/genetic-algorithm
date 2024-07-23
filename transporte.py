@@ -22,7 +22,7 @@ from funcoes import (
 from tipos import Armazem
 
 # Constantes e dados do problema
-WIDTH, HEIGHT = 1366, 768
+WIDTH, HEIGHT = 1200, 900
 TAMANHO_POPULACAO = 500
 TOTAL_GERACOES = 1000
 CAPACIDADE_MAXIMA = 50
@@ -34,7 +34,7 @@ PERCENTUAL_MARGEM = 0.05  # 5% de margem
 margin_x = int(WIDTH * PERCENTUAL_MARGEM)
 margin_y = int(HEIGHT * PERCENTUAL_MARGEM)
 
-altura_parte_inferior = int(HEIGHT * 0.8) # 80% da altura total da tela
+altura_parte_inferior = int(HEIGHT * 0.60) # 80% da altura total da tela
 
 NOMES_CIDADES = ["Tokyo", "New York", "Paris", "Berlim", "Roma", "Pequim", "Madrid", "Washington", "Brasilia", "Montevideo"]
 LOCAL_CIDADES = [(random.randint(margin_x, WIDTH - margin_x), random.randint(margin_y, altura_parte_inferior - margin_y)) for _ in range(len(NOMES_CIDADES))]

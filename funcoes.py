@@ -127,11 +127,11 @@ def desenhar_rotas(screen, melhor_rota, armazens):
 
 def plotar_grafico(geracoes, tempos):
 
-    fig, ax = plt.subplots(figsize=(6, 4))
+    fig, ax = plt.subplots(figsize=(6, 3.6))
     ax.plot(geracoes, tempos, marker='o', color='b', linestyle='-')
-    ax.set_xlabel('Geração')
-    ax.set_ylabel('Melhor Tempo')
-    ax.set_title('Melhor Tempo por Geração')
+    ax.set_title('Melhor Tempo por Geração', fontsize=8)
+    ax.set_xlabel('Geração', fontsize=8)
+    ax.set_ylabel('Melhor Tempo', fontsize=8)
     ax.grid(True)
     
     # Converter o gráfico matplotlib para uma superfície pygame
@@ -148,16 +148,10 @@ def desenhar_info(screen, geracao, melhor_tempo, melhor_individuo, metodo_seleca
     GREEN = (0, 255, 0)
 
     # Calcula a altura onde a linha divisória inferior deve ser desenhada
-    altura_parte_inferior = int(768 * 0.8)  # 80% da altura total da tela
+    altura_parte_inferior = int(900 * 0.60)  # 65% da altura total da tela
 
     # Desenha a linha horizontal na parte inferior
-    pygame.draw.line(screen, GREEN, (0, altura_parte_inferior), (1366, altura_parte_inferior), 2)
-
-    # Calcula a posição vertical para a linha vertical na metade da parte inferior
-    metade_inferior = altura_parte_inferior + (768 - altura_parte_inferior) // 2
-
-    # Desenha a linha vertical na metade da parte inferior
-    pygame.draw.line(screen, GREEN, (683, altura_parte_inferior), (683, 768), 2)
+    #pygame.draw.line(screen, GREEN, (0, altura_parte_inferior), (1290, altura_parte_inferior), 2)
 
     # Ajusta as posições verticais das linhas de texto
     linha1_y = altura_parte_inferior + 20
@@ -181,7 +175,7 @@ def desenhar_info(screen, geracao, melhor_tempo, melhor_individuo, metodo_seleca
         # Plotar o gráfico
         if geracoes and tempos:
             graph_surface = plotar_grafico(geracoes, tempos)
-            screen.blit(graph_surface, (550, 200))
+            screen.blit(graph_surface, (600, altura_parte_inferior))
 
 
     text = font.render(f"Método de seleção de pais escolhido: {metodo_selecao_escolhido}", True, GREEN)  
