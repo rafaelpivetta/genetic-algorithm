@@ -4,7 +4,7 @@
 O problema consiste na otimização das rotas de entrega de uma empresa de logística que precisa reabastecer armazéns distribuídos por várias cidades com sua frota de veículos.
 
 ## Parâmetros
-O problema foi delimitado conforme :
+O problema foi delimitado conforme:
 - Cada cidade tem um armazém com um estoque mínimo de itens que precisa ser abastecido, e possui coordenadas específicas em um plano cartesiano, geradas aleatoriamente de forma a possibilitar sua plotagem numa área de tela específica.
 - A empresa dispõe de uma frota limitada de veículos, cuja capacidade de carga é inversamente proporcional à sua velocidade (Velocidade = 120 km/h − Itens de Carga). Por exemplo, um veículo com capacidade para 20 itens viaja a 100 km/h, enquanto sua velocidade máxima seria 120 km/h sem carga. 
 - Cada solução testada pelo algoritmo (indivíduo) tem de 1 a 10 de veículos, com a mesma capacidade de carga de até 100 itens cada. 
@@ -16,19 +16,19 @@ O problema foi delimitado conforme :
 O desafio é encontrar o melhor balanceamento entre carga e velocidade dos veículos, número de veículos e rota de entrega entre as cidades, de forma a abastecer o estoque mínimo de todos os armazéns no menor tempo possível. 
 
 ## O código da Solução em Python
-O código abaixo é uma implementação de um algoritmo genético simplificado, que inclui funções para calcular a matriz de distâncias entre cidades, gerar uma população inicial de indivíduos, e realizar seleção por diversos métodos, como seleção aleatória, torneio, roleta, rank, elitismo e truncamento. (método elitista aleatório) (torneio entre os 10 melhores)
+O código é uma implementação de um algoritmo genético, que inclui funções para calcular a matriz de distâncias entre cidades, gerar uma população inicial de indivíduos, e realizar seleção por diversos métodos, como seleção aleatória, torneio, roleta, rank.
 
 O código inclui:
 - As principais funções utilizadas para a implementação detalhada do algoritmo genético combinado com a biblioteca Pygame para visualização (funções.py).
 - A definição de duas classes, Armazém e Individuo, e implementação da funcionalidade de cálculo de fitness para um algoritmo genético focado em logística e distribuição.
 - Loop principal que simula o processo evolutivo de um algoritmo genético, iterando através de gerações, avaliando fitness, selecionando pais, aplicando crossover e mutação, e finalmente atualizando a população com novos indivíduos. 
-- O uso de Pygame que permite uma visualização interativa da evolução do algoritmo em tempo real, tornando possível observar seu funcionamento na busca por soluções ótimas.
+- O uso de Pygame permite uma visualização interativa da evolução do algoritmo em tempo real, tornando possível observar seu funcionamento na busca pela melhor solução.
 
 ## Detalhamento do código da solução
 
-### Primeira Parte:
+### funcoes.py:
 
-O código abaixo define as principais funções usadas utilizadas para a implementação detalhada de um algoritmo genético combinado com a biblioteca Pygame para visualização.
+A implementação define as principais funções usadas utilizadas para a implementação detalhada de um algoritmo genético combinado com a biblioteca Pygame para visualização.
 
 Aqui estão os principais componentes e funcionalidades do código:
 - Cálculo da Matriz de Distâncias: `calcular_matriz_distancias(local_cidades)`: Calcula e retorna uma matriz de distâncias euclidianas entre cidades, baseada nas coordenadas (x, y) fornecidas para cada cidade.
@@ -39,9 +39,9 @@ Aqui estão os principais componentes e funcionalidades do código:
 - Métodos de Seleção: Vários métodos de seleção são implementados para escolher pais para a reprodução, como seleção aleatória, torneio, roleta, rank, elitismo e truncamento. Esses métodos ajudam a diversificar as soluções e a selecionar os melhores candidatos para a reprodução baseada em fitness.
 
 
-### Segunda parte:
+### tipos.py:
 
-Este trecho código define duas classes, Armazem e Individuo, e implementa a funcionalidade de cálculo de fitness para um algoritmo genético focado em logística e distribuição. 
+Responsável pela definição de duas classes, Armazem e Individuo, que implementam a funcionalidade de cálculo de fitness para um algoritmo genético focado em logística e distribuição.
 
 Vamos comentar cada parte do código para entender suas funcionalidades e interações.
 - Classe Armazem: Esta classe representa um armazém localizado em uma cidade específica. Ela armazena informações sobre a localização geográfica do armazém, o nome da cidade onde está localizado, e o estoque mínimo necessário que deve ser mantido.
@@ -51,9 +51,9 @@ Vamos comentar cada parte do código para entender suas funcionalidades e intera
     - O método assume que os armazéns que já atingiram o estoque mínimo são removidos da rota, minimizando o percurso e, consequentemente, o tempo total de entrega. 
     - A cada iteração do loop principal, a rota é recalculada para garantir que apenas os armazéns que ainda precisam de reabastecimento sejam visitados.
 
-### Terceira parte
+### transporte.py
 
-O código a seguir implementa um sistema de otimização de rotas usando algoritmos genéticos, visualizado através da biblioteca Pygame, utilizando as classes e métodos definidos anteriormente. 
+Responsável pela implementação do sistema de otimização de rotas, visualizado através da biblioteca Pygame, utilizando as classes e métodos definidos anteriormente. 
 
 Vamos agora revisar e detalhar as principais funções e objetivos do código.
 
@@ -75,7 +75,7 @@ Funções Principais:
 - desenhar_info(): Exibe informações sobre a geração atual e o melhor indivíduo.
 
 Métodos de Seleção: 
-- Vários métodos de seleção de pais como seleção aleatória, torneio, roleta, rank, elitismo e truncamento são definidos para escolher os pais para a reprodução.
+- Vários métodos de seleção de pais como seleção aleatória, torneio, roleta, rank são definidos para escolher os pais.
 
 Loop Principal:
 - main(): Contém o loop principal onde ocorre o processo do algoritmo genético:
@@ -84,14 +84,14 @@ Loop Principal:
 - Seleciona pais e gera novos indivíduos através de crossover e mutação.
 - Repete o processo para o número definido de gerações.
 
-### Quarta parte
+### Apresentação dos resultados
 
-Criação de uma simulação gráfica usando PyGame para observar o comportamento e a eficácia das rotas geradas pela evolução de indivíduos em um ambiente simulado.
+Criação de uma simulação gráfica para observar o comportamento e a eficácia das rotas geradas pela evolução de indivíduos em um ambiente simulado.
 Execução e Visualização:
-- Visualiza o processo em tempo real usando Pygame.
-- O sistema é projetado para ser autocontido e visualmente interativo, permitindo ao usuário observar a evolução da otimização da rota em tempo real.
+- Visualização da melhor rota de forma interativa conforme ocorre a evolução ao longo das gerações.
+- O gráfico exibe as coordenadas x,y permitindo ao usuário observar a evolução da otimização do tempo em relação à geração.
 
 
-### Final 
+### Conclusão
 
-Este código serve como um exemplo robusto de como aplicar conceitos de algoritmos genéticos a problemas práticos de otimização, com o benefício adicional de visualização gráfica para uma melhor compreensão dos processos dinâmicos envolvidos.
+Este código serve como um exemplo robusto de como aplicar conceitos de algoritmos genéticos a problemas práticos de otimização, com o benefício adicional de visualização gráfica para uma melhor compreensão dos processos envolvidos.
