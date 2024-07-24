@@ -3,8 +3,13 @@ from typing import List, Tuple
 
 import numpy as np
 import pygame
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from tipos import Individuo
 
+# Variáveis globais para armazenar as gerações e os tempos
+geracoes = []
+tempos = []
 
 def calcular_matriz_distancias(
     local_cidades: List[Tuple[int, int]]
@@ -81,7 +86,6 @@ def init_screen(width: int, height: int, caption: str) -> pygame.Surface:
     return screen
 
 def desenhar_rotas(screen, melhor_rota, armazens):
-    
     # Cores
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
@@ -106,7 +110,7 @@ def desenhar_rotas(screen, melhor_rota, armazens):
     for i in range(len(melhor_rota)):
         cidade_atual = melhor_rota[i]
         proxima_cidade = melhor_rota[(i + 1) % len(melhor_rota)]
-        # print(i, (i+1), cidade_atual, proxima_cidade)
+
         pygame.draw.line(
             screen,
             RED,
@@ -121,22 +125,61 @@ def desenhar_rotas(screen, melhor_rota, armazens):
 
     pygame.display.flip()  # Atualiza a tela
 
-def desenhar_info(screen, geracao, melhor_tempo, melhor_individuo, metodo_selecao_escolhido):
+def plotar_grafico(geracoes, tempos):
+
+    fig, ax = plt.subplots(figsize=(6, 3.6))
+    ax.plot(geracoes, tempos, marker='o', color='b', linestyle='-')
+    ax.set_title('Melhor Tempo por Geração', fontsize=8)
+    ax.set_xlabel('Geração', fontsize=8)
+    ax.set_ylabel('Melhor Tempo', fontsize=8)
+    ax.grid(True)
+    
+    # Converter o gráfico matplotlib para uma superfície pygame
+    canvas = FigureCanvas(fig)
+    canvas.draw()
+    renderer = canvas.get_renderer()
+    raw_data = renderer.tostring_rgb()
+    size = canvas.get_width_height()
+    
+    return pygame.image.fromstring(raw_data, size, "RGB")
+
+def desenhar_info(screen, geracao, melhor_tempo, melhor_individuo, metodo_selecao_escolhido, WIDTH, HEIGHT):
     font = pygame.font.Font(None, 20)
     GREEN = (0, 255, 0)
 
-    text = font.render(f"Geração: {geracao}", True, GREEN)  
-    screen.blit(text, (10, 500))
+    # Calcula a altura onde a linha divisória inferior deve ser desenhada
+    altura_parte_inferior = int(HEIGHT * 0.60)  # 65% da altura total da tela
+
+    # Desenha a linha horizontal na parte inferior
+    #pygame.draw.line(screen, GREEN, (0, altura_parte_inferior), (WIDTH, altura_parte_inferior), 2)
+
+    # Ajusta as posições verticais das linhas de texto
+    linha1_y = altura_parte_inferior + 20
+    linha2_y = linha1_y + 20
+    linha3_y = linha2_y + 20
+    linha4_y = linha3_y + 20
+
+    text = font.render(f"Geração: {geracao}", True, GREEN)
+    screen.blit(text, (10, linha1_y))
 
     if melhor_individuo:
-        
         text = font.render(f"Melhor indivíduo: {melhor_individuo}", True, GREEN)
-        screen.blit(text, (10, 520))
+        screen.blit(text, (10, linha2_y))
         text = font.render(f"Melhor tempo: {melhor_tempo}", True, GREEN)
-        screen.blit(text, (10, 540))
+        screen.blit(text, (10, linha3_y))
+        
+        # Adicionar a geração atual e o melhor tempo às listas globais
+        geracoes.append(geracao)
+        tempos.append(melhor_tempo)
+
+        # Plotar o gráfico
+        if geracoes and tempos:
+            graph_surface = plotar_grafico(geracoes, tempos)
+            screen.blit(graph_surface, (int(WIDTH/2), altura_parte_inferior))
+
 
     text = font.render(f"Método de seleção de pais escolhido: {metodo_selecao_escolhido}", True, GREEN)  
-    screen.blit(text, (10, 560))
+    screen.blit(text, (10, linha4_y))
 
     pygame.display.flip()
     
